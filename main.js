@@ -40,18 +40,21 @@ function Ball() {
         // Check if ball reach vertical limits
         if (Game.ball.y > 480 || Game.ball.y < 0){
             Game.ball.angle = -Game.ball.angle;
+            boing.play();
         }
-        // Check if there is a player
+        // Check if there is player 2
         if (this.x >= Game.w - (Game.p2.w + Game.p2.offset + this.w) && this.y > Game.p2.y && this.y < Game.p2.y + Game.p2.h){
             console.log(this.x);
             this.x = Game.w - (Game.p2.w + Game.p2.offset + this.w) - 1;
             this.angle = Math.PI - this.angle;
             Game.ball.speed += 1;
+            ping.play();
         }
-        // Else, the ball goes away
+        // Check if there is player 1
         if (this.x < Game.p1.w + Game.p1.offset && this.y > Game.p1.y && this.y < Game.p1.y + Game.p1.h){
             this.x = Game.p1.w + Game.p1.offset + 1;
             this.angle = Math.PI - this.angle;
+            ping.play();
         }
         this.x = this.x + this.speed * Math.cos(this.angle);
         this.y = this.y + this.speed * Math.sin(this.angle);
@@ -99,7 +102,9 @@ Game.update = function() {
 
     // Game over in this case
     if (this.ball.x > Game.w || this.ball.x < 0){
+        gameOver.play();
         Game.init();
+
         console.log("GAME OVER");
     } 
 };
@@ -115,6 +120,16 @@ Game.run = function() {
     Game.update();
     Game.draw();
 };
+
+// Init music 
+var music = new Audio('music.mp3');
+music.volume = .3;
+music.play();
+
+// init sounds
+var boing = new Audio('boing.mp3');
+var ping = new Audio('ping.mp3');
+var gameOver = new Audio('gameOver.mp3');
 
 
 window.addEventListener('keyup', function(event) { Key.onKeyup(event); }, false);
