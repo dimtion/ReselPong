@@ -1,6 +1,6 @@
 Game = {};
 
-function Player(div_id, up_key, down_key) {
+function Player(div_id, up_key, down_key, score, div_score) {
     this.div = document.getElementById(div_id);
     this.w = this.div.clientWidth;
     this.h = this.div.clientHeight;
@@ -9,6 +9,8 @@ function Player(div_id, up_key, down_key) {
     this.speed = 10;
     this.up_key = up_key;
     this.down_key = down_key;
+    this.score = score;
+    this.div_score = document.getElementById(div_score);
 
     this.moveUp = function(){
         if(this.y > 0)
@@ -23,6 +25,7 @@ function Player(div_id, up_key, down_key) {
     this.update = function(){
         if (Key.isDown(this.up_key))    this.moveUp();
         if (Key.isDown(this.down_key))  this.moveDown();
+
     };
 }
 
@@ -44,7 +47,6 @@ function Ball() {
         }
         // Check if there is player 2
         if (this.x >= Game.w - (Game.p2.w + Game.p2.offset + this.w) && this.y > Game.p2.y && this.y < Game.p2.y + Game.p2.h){
-            console.log(this.x);
             this.x = Game.w - (Game.p2.w + Game.p2.offset + this.w) - 1;
             this.angle = Math.PI - this.angle;
             Game.ball.speed += 1;
@@ -56,6 +58,7 @@ function Ball() {
             this.angle = Math.PI - this.angle;
             ping.play();
         }
+
         this.x = this.x + this.speed * Math.cos(this.angle);
         this.y = this.y + this.speed * Math.sin(this.angle);
     }
@@ -88,12 +91,23 @@ Game.init = function() {
     Game.w = Game.container.clientWidth;
     Game.h = Game.container.clientHeight;
 
-
-    Game.p1 = new Player('p1', Key.A, Key.Q);
-    Game.p2 = new Player('p2', Key.O, Key.L);
+    Game.p1 = new Player('p1', Key.A, Key.Q, 0, 'score1');
+    Game.p1.div_score.innerHTML = Game.p1.score;
+    Game.p2 = new Player('p2', Key.O, Key.L, 0, 'score2');
+    Game.p2.div_score.innerHTML = Game.p2.score;
     Game.ball = new Ball();
     Game.fps = 50;
 };
+
+Game.reset = function() {
+
+    Game.p1.div_score.innerHTML = Game.p1.score;
+    Game.p2.div_score.innerHTML = Game.p2.score;
+
+    Game.p1 = new Player('p1', Key.A, Key.Q, Game.p1.score, 'score1');
+    Game.p2 = new Player('p2', Key.O, Key.L, Game.p2.score, 'score2');
+    Game.ball = new Ball();
+}
 
 Game.update = function() {
     this.p1.update();
@@ -101,12 +115,17 @@ Game.update = function() {
     this.ball.update();
 
     // Game over in this case
-    if (this.ball.x > Game.w || this.ball.x < 0){
+    if (this.ball.x > Game.w){
+        Game.p1.score++;
         gameOver.play();
-        Game.init();
-
-        console.log("GAME OVER");
-    } 
+        Game.reset();
+        console.log("Palyer 1 Wins");
+    } else if  (this.ball.x < 0){
+        Game.p2.score++;
+        gameOver.play();
+        Game.reset();
+        console.log("Palyer 2 Wins");
+    }
 };
 
 Game.draw = function (){
@@ -124,6 +143,7 @@ Game.run = function() {
 // Init music 
 var music = new Audio('music.mp3');
 music.volume = .3;
+music.loop = true;
 music.play();
 
 // init sounds

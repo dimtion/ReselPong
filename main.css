@@ -14,7 +14,6 @@ body {
 
 #pong-container > div {
     position: absolute;
-    top: 0px;
     background-color: #10FF00;
 }
 
@@ -43,4 +42,19 @@ body {
     background-color: #006F00 !important;
     height: 100%;
     left: 50%;
+}
+
+.scores {
+    bottom: -100px;
+    width: 100%;
+    text-align: center;
+    background-color: #000000 ! important;
+
+}
+
+.scores > div {
+    display: inline-block;
+    width: 49%;
+    color: #10FF00;
+    font-size: 2em;
 }
