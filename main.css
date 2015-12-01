@@ -1,5 +1,6 @@
 body {
     background-color: #000000;
+    font-family: 'Courier New';
 }
 #pong-container{
     width: 500px;
@@ -55,6 +56,15 @@ body {
 .scores > div {
     display: inline-block;
     width: 49%;
+    color: #10FF00;
+    font-size: 2em;
+}
+
+.title {
+    top: -112px;
+    width: 100%;
+    text-align: center;
+    background-color: #000000 ! important;
     color: #10FF00;
     font-size: 2em;
 }
