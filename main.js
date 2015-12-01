@@ -4,7 +4,7 @@ function Player(div_id, up_key, down_key) {
     this.div = document.getElementById(div_id);
     this.w = this.div.clientWidth;
     this.h = this.div.clientHeight;
-
+    this.offset = 5;
     this.y = Game.h / 2;
     this.speed = 10;
     this.up_key = up_key;
@@ -21,10 +21,8 @@ function Player(div_id, up_key, down_key) {
     };
 
     this.update = function(){
-        if (Key.isDown(this.up_key)) {
-            this.moveUp();
-        }
-        if (Key.isDown(this.down_key)) this.moveDown();
+        if (Key.isDown(this.up_key))    this.moveUp();
+        if (Key.isDown(this.down_key))  this.moveDown();
     };
 }
 
@@ -32,24 +30,28 @@ function Ball() {
     this.div = document.getElementById('ball');
     this.w = this.div.clientWidth;
     this.h = this.div.clientHeight;
-    console.log(this.w)
+
     this.x = Game.w / 2;
-    this.y = Game.h /2;
-    this.angle = .9;
-    this.speed = 4;
+    this.y = Game.h / 2;
+    this.angle = Math.random()*2*Math.PI;
+    this.speed = 3;
+
     this.update = function(){
+        // Check if ball reach vertical limits
         if (Game.ball.y > 480 || Game.ball.y < 0){
             Game.ball.angle = -Game.ball.angle;
         }
-        // If there is somebody
-        if (this.x > 490 && this.y > Game.p2.y && this.y < Game.p2.y + 50){
-            this.x = 489;
-            this.angle = 3.14 - this.angle;
+        // Check if there is a player
+        if (this.x >= Game.w - (Game.p2.w + Game.p2.offset + this.w) && this.y > Game.p2.y && this.y < Game.p2.y + Game.p2.h){
+            console.log(this.x);
+            this.x = Game.w - (Game.p2.w + Game.p2.offset + this.w) - 1;
+            this.angle = Math.PI - this.angle;
             Game.ball.speed += 1;
         }
-        if (this.x < 10 && this.y > Game.p1.y && this.y < Game.p1.y + 50){
-            this.x = 11;
-            this.angle = 3.14 - this.angle;
+        // Else, the ball goes away
+        if (this.x < Game.p1.w + Game.p1.offset && this.y > Game.p1.y && this.y < Game.p1.y + Game.p1.h){
+            this.x = Game.p1.w + Game.p1.offset + 1;
+            this.angle = Math.PI - this.angle;
         }
         this.x = this.x + this.speed * Math.cos(this.angle);
         this.y = this.y + this.speed * Math.sin(this.angle);
@@ -96,7 +98,7 @@ Game.update = function() {
     this.ball.update();
 
     // Game over in this case
-    if (this.ball.x > 500 || this.ball.x < 0){
+    if (this.ball.x > Game.w || this.ball.x < 0){
         Game.init();
         console.log("GAME OVER");
     } 

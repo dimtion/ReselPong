@@ -15,7 +15,7 @@ body {
 #pong-container > div {
     position: absolute;
     top: 0px;
-    background-color: #10FF10;
+    background-color: #10FF00;
 }
 
 .player {
@@ -25,15 +25,22 @@ body {
 }
 
 #p1 {
-    left: 0px;
+    left: 5px;
 }
 
 #p2 {
-    left: 490px;
+    left: 485px;
 }
 
 #ball {
     border-radius: 10px;
     height: 10px;
     width: 10px;
+}
+
+#separator {
+    width: 1px;
+    background-color: #006F00 !important;
+    height: 100%;
+    left: 50%;
 }
