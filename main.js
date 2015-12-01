@@ -41,19 +41,19 @@ function Ball() {
 
     this.update = function(){
         // Check if ball reach vertical limits
-        if (Game.ball.y > 480 || Game.ball.y < 0){
+        if (Game.ball.y > Game.h - this.h || Game.ball.y < 0){
             Game.ball.angle = -Game.ball.angle;
             boing.play();
         }
         // Check if there is player 2
-        if (this.x >= Game.w - (Game.p2.w + Game.p2.offset + this.w) && this.y > Game.p2.y && this.y < Game.p2.y + Game.p2.h){
+        if (this.x >= Game.w - (Game.p2.w + Game.p2.offset + this.w) && (this.y + this.h / 2) > Game.p2.y && this.y < Game.p2.y + Game.p2.h){
             this.x = Game.w - (Game.p2.w + Game.p2.offset + this.w) - 1;
             this.angle = Math.PI - this.angle;
             Game.ball.speed += 1;
             ping.play();
         }
         // Check if there is player 1
-        if (this.x < Game.p1.w + Game.p1.offset && this.y > Game.p1.y && this.y < Game.p1.y + Game.p1.h){
+        if (this.x < Game.p1.w + Game.p1.offset && this.y > Game.p1.y && (this.y + this.h / 2) < Game.p1.y + Game.p1.h){
             this.x = Game.p1.w + Game.p1.offset + 1;
             this.angle = Math.PI - this.angle;
             ping.play();
@@ -96,7 +96,7 @@ Game.init = function() {
     Game.p2 = new Player('p2', Key.O, Key.L, 0, 'score2');
     Game.p2.div_score.innerHTML = Game.p2.score;
     Game.ball = new Ball();
-    Game.fps = 50;
+    Game.fps = 60;
 };
 
 Game.reset = function() {
